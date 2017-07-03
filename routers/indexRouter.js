@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var indexCtrl = require('../controller/indexCtrl.js');
+
 router
-  .get('/', (req, res) => { // 获取首页页面
-    res.render('index');
-  });
+  .get('/', indexCtrl.showIndexPage);
 
 module.exports = router;

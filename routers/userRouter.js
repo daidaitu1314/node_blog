@@ -8,5 +8,6 @@ router
   .get('/login', userCtrl.showLoginPage) // 获取登录页面
   .post('/register', userCtrl.registerNewUser) // 注册新用户
   .post('/login', userCtrl.login) // 用户登录
+  .get('/logout', userCtrl.logout) // 退出登录
 
 module.exports = router;

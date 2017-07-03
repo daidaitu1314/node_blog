@@ -2,6 +2,8 @@ var fs = require('fs');
 var path = require('path');
 // 导入解析Body数据的中间件
 var bodyParser = require('body-parser');
+// 导入 session 模块
+var session = require('express-session');
 // 导入 express 模块
 var express = require('express');
 // 创建 express 的服务器实例
@@ -13,6 +15,12 @@ app.use('/node_modules', express.static('node_modules'));
 app.set('view engine', 'ejs');
 // 注册解析 body 数据的中间件
 app.use(bodyParser.urlencoded({ extended: false }));
+// 注册 session 中间件
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true
+}))
 
 
 // 1. 原始路由：

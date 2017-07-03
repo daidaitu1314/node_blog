@@ -1,4 +1,5 @@
 var UserModel = require('../model/UserModel.js');
+var md5 = require('blueimp-md5');
 
 module.exports = {
   showRegisterPage(req, res) { // 展示注册页面
@@ -19,6 +20,7 @@ module.exports = {
       })
       .then((results) => {
         if (results === 0) {// 可以注册
+          newUser.password = md5(newUser.password, require('../common.js').pwdSalt);
           return UserModel.create(newUser);
         } else {
           return false;
@@ -50,7 +52,7 @@ module.exports = {
         return UserModel.findOne({
           where: {
             username: loginUser.username,
-            password: loginUser.password
+            password: md5(loginUser.password, require('../common.js').pwdSalt)
           }
         });
       })
@@ -61,10 +63,20 @@ module.exports = {
             msg: '用户名或密码失败，稍后再试！'
           });
         } else {
+          console.log(results);
+          // 将登录信息保存到session中
+          req.session.user = results;
+          req.session.islogin = true;
           res.json({
             err_code: 0
           });
         }
       });
+  },
+  logout(req, res) { // 退出用户登录
+    req.session.destroy((err) => {
+      if (err) throw err;
+      res.redirect('/');
+    });
   }
 }
